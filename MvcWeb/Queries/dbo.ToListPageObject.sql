@@ -1,0 +1,7 @@
+﻿CREATE PROCEDURE [dbo].[ToListPageObject]
+AS
+BEGIN
+	SELECT *
+	FROM [dbo].[PageObject]
+	FOR XML RAW, ROOT('ROOT'), ELEMENTS
+END

@@ -1,0 +1,4 @@
+C:\Users\CodeBracket\Documents\Visual Studio 2013\Projects\C# Examples\MvcWeb\DynamicPages\bin\Debug\DynamicPages.dll
+C:\Users\CodeBracket\Documents\Visual Studio 2013\Projects\C# Examples\MvcWeb\DynamicPages\bin\Debug\DynamicPages.pdb
+C:\Users\CodeBracket\Documents\Visual Studio 2013\Projects\C# Examples\MvcWeb\DynamicPages\obj\Debug\DynamicPages.dll
+C:\Users\CodeBracket\Documents\Visual Studio 2013\Projects\C# Examples\MvcWeb\DynamicPages\obj\Debug\DynamicPages.pdb

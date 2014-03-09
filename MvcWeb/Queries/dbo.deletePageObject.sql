@@ -1,0 +1,27 @@
+﻿/*
+	RETURNS
+		0 IF NO CHANGES WERE MADE BECAUSE THE NAME ALREADY EXISTS
+		1 IF THE PROCEDURE WAS SUCCESSFUL
+		3 IF THERE WAS AN ERROR
+*/
+CREATE PROCEDURE [dbo].[deletePageObject]
+	@id INT,
+	@name VARCHAR(200),
+	@orde INT
+AS
+BEGIN
+	DECLARE 
+		@RETURN INT
+	IF((SELECT [name] FROM [dbo].[PageObject] WHERE [name] = @name) IS NOT NULL)
+	BEGIN TRY
+		DELETE FROM [dbo].[PageObject]
+		WHERE [name] = @name OR [id] = @id
+		SET @RETURN = 1
+	END TRY
+	BEGIN CATCH
+		SET @RETURN = 3
+	END CATCH
+	
+	RETURN @RETURN
+END
+GO

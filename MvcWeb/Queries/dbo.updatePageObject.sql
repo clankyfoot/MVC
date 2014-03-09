@@ -1,0 +1,28 @@
+﻿/*
+	RETURNS
+		0 IF NO CHANGES WERE MADE BECAUSE THE NAME ALREADY EXISTS
+		1 IF THE PROCEDURE WAS SUCCESSFUL
+		3 IF THERE WAS AN ERROR
+*/
+CREATE PROCEDURE [dbo].[updatePageObject]
+	@id INT,
+	@name VARCHAR(200),
+	@order INT
+AS
+BEGIN
+	DECLARE 
+		@RETURN INT
+	IF((SELECT [name] FROM [dbo].[PageObject] WHERE [name] = @name) IS NOT NULL)
+	BEGIN TRY
+		UPDATE [dbo].[PageObject]
+		SET [name] = @name , [order] = @order
+		WHERE [id] = @id
+		SET @RETURN = 1
+	END TRY
+	BEGIN CATCH
+		SET @RETURN = 3
+	END CATCH
+	
+	RETURN @RETURN
+END
+GO
