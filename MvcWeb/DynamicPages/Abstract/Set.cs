@@ -44,7 +44,7 @@ namespace DynamicPages.Abstract
             using(connection)
             {
                 connection.Open();
-                command.ExecuteNonQueryAsync();
+                command.ExecuteNonQuery();
             }
             if((int)returnValue.Value == 1)
             {
@@ -67,7 +67,7 @@ namespace DynamicPages.Abstract
             using (connection)
             {
                 connection.Open();
-                command.ExecuteNonQueryAsync();
+                command.ExecuteNonQuery();
             }
             if ((int)returnValue.Value == 1)
             {
@@ -90,7 +90,7 @@ namespace DynamicPages.Abstract
             using (connection)
             {
                 connection.Open();
-                command.ExecuteNonQueryAsync();
+                command.ExecuteNonQuery();
             }
             if ((int)returnValue.Value == 1)
             {

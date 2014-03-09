@@ -3,21 +3,22 @@
 $(document).ready(function () {
     $("#createButton").click(function () {
         $("#createPageForm").show(700);
+
+        var element = null;
+        for (var i = 0; i < $("#createPageForm").children("input").length; i++) {
+            element = $("#createPageForm").children("input").get(i);
+            alert($(element).id + " " + $(element).val());
+        }
     });
     $("#createPageForm > .create").click(function () {
         create_click($("#createPageForm"));
     });
     $("#createPageForm > .cancel").click(function () {
-        var element = $("#createPageForm").children("input").first();
-        alert($(element));
-        for (var i = 0; i < $("#createPageForm").children("input").length; i++) {
-            $(element).text("");
-            element = $(element).next("input");
-        }
+        
         $("#createPageForm").slideUp(700, null);
     });
     $("#createPageForm > input").on("keyup change blur paste cut click", function () {
-        alert($(this).id + " " + $(this).val());
+        
         if ($(this).val() == "" || $(this).val().length < 3) {
             $(this).next("span").addClass("field-validation-error");
             $(this).next("span").text("Invalid");

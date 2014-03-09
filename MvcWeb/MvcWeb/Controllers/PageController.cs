@@ -46,11 +46,11 @@ namespace MvcWeb.Controllers
             {
                 case "String":
                 case "string":
-                    ret = set.deletePage((string)idOrName);
+                    ret = set.delete((string)idOrName);
                     break;
                 case "Int32":
                 case "Int64":
-                    ret = set.deletePage((int)idOrName);
+                    ret = set.delete((int)idOrName);
                     break;
                 default:
                     break;
