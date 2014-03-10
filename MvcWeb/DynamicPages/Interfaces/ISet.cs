@@ -28,5 +28,11 @@ namespace DynamicPages.Interfaces
         /// in the database
         /// </summary>
         List<EntityModel> ToList();
+        /// <summary>
+        /// Executes a "ExecuteNonQuery()" against the database
+        /// </summary>
+        /// <exception cref="NullReferenceException">Throws this excetion whent the SqlCommand Object is not built</exception>
+        /// <returns></returns>
+        bool execute();
     }
 }

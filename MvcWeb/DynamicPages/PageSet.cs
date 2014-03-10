@@ -32,25 +32,9 @@ namespace DynamicPages
         /// <returns>true if the procedure was successfull , else false</returns>
         public bool create(string name)
         {
-            buildConnection();
-            buildCommand(CREATE_PAGE, true);
-            // the id and order actually don't matter for this insert
-            addParameters(new Models.PageObject() { id = "0", name = name, order = "0" });
-            using(connection)
-            {
-                connection.Open();
-                command.ExecuteNonQuery();
-            }
-            command.Dispose();
-            GC.Collect();
-            if((int)returnValue.Value == 1)
-            {
-                return true;
-            }
-            else
-            {
-                return false;
-            }
+            // ID and Order don't actually matter on the insert
+            buildCommand(CREATE_PAGE, true, new Models.PageObject() { id = "0", name = name, order = "0" });
+            return execute();
         }
         /// <summary>
         /// Updates the name of the page
@@ -60,23 +44,8 @@ namespace DynamicPages
         /// <returns>true if the procedure was successfull, else false</returns>
         public bool updatePageName(int id, string newName)
         {
-            buildConnection();
-            buildCommand(UPDATE_PAGE_NAME, true);
-            addParameters("id", id);
-            addParameters("name", newName);
-            using(connection)
-            {
-                connection.Open();
-                command.ExecuteNonQuery();
-            }
-            if((int)returnValue.Value == 1)
-            {
-                return true;
-            }
-            else
-            {
-                return false;
-            }
+            buildCommand(UPDATE_PAGE_NAME, true, new[] { "id", "name" }, new object[] { id, newName } );
+            return execute();
         }
         /// <summary>
         /// Updates the order number in which the page is displayed
@@ -85,23 +54,8 @@ namespace DynamicPages
         /// <returns>true if the procedure, else fasle</returns>
         public bool updatePageOrder(int id, int order)
         {
-            buildConnection();
-            buildCommand(UPDATE_PAGE_ORDER_BYID, true);
-            addParameters("id", id);
-            addParameters("order", order);
-            using(connection)
-            {
-                connection.Open();
-                command.ExecuteNonQuery();
-            }
-            if((int)returnValue.Value == 1)
-            {
-                return true;
-            }
-            else
-            {
-                return false;
-            }
+            buildCommand(UPDATE_PAGE_ORDER_BYID, true, new[] { "id", "order" }, new object[] { id, order });
+            return execute();
         }
         /// <summary>
         /// Updates the order number in which the page is displayed
@@ -110,23 +64,8 @@ namespace DynamicPages
         /// <returns>true if the procedure was successfull, else false</returns>
         public bool updatePageOrder(string name, int order)
         {
-            buildCommand(UPDATE_PAGE_ORDER_BYNAME, true);
-            buildConnection();
-            addParameters("name", name);
-            addParameters("order", order);
-            using (connection)
-            {
-                connection.Open();
-                command.ExecuteNonQueryAsync();
-            }
-            if ((int)returnValue.Value == 1)
-            {
-                return true;
-            }
-            else
-            {
-                return false;
-            }
+            buildCommand(UPDATE_PAGE_ORDER_BYNAME, true, new[] { "name", "order" }, new object[] { name, order });
+            return execute();
         }
         /// <summary>
         /// Gets the page by the Unique ID
@@ -152,22 +91,8 @@ namespace DynamicPages
         /// <returns>true if the procedure was successfull, else false</returns>
         public bool delete(int id)
         {
-            buildConnection();
-            buildCommand(DELETE_PAGE_BYID, true);
-            addParameters("id", id);
-            using (connection)
-            {
-                connection.Open();
-                command.ExecuteNonQuery();
-            }
-            if ((int)returnValue.Value == 1)
-            {
-                return true;
-            }
-            else
-            {
-                return false;
-            }
+            buildCommand(DELETE_PAGE_BYID, true, "id", id);
+            return execute();
         }
         /// <summary>
         /// Deletes a page
@@ -175,22 +100,8 @@ namespace DynamicPages
         /// <returns>true if the procedure was successfull, else false</returns>
         public bool delete(string name)
         {
-            buildConnection();
-            buildCommand(DELETE_PAGE_BYNAME, true);
-            addParameters("name", name);
-            using (connection)
-            {
-                connection.Open();
-                command.ExecuteNonQuery();
-            }
-            if ((int)returnValue.Value == 1)
-            {
-                return true;
-            }
-            else
-            {
-                return false;
-            }
+            buildCommand(DELETE_PAGE_BYNAME, true, "name", name);
+            return execute();
         }
     }
 }

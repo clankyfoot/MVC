@@ -15,23 +15,23 @@ namespace DynamicPages.Abstract
         /// <summary>
         /// Connection to the database
         /// </summary>
-        protected System.Data.SqlClient.SqlConnection connection { get; set; }
+        private System.Data.SqlClient.SqlConnection connection { get; set; }
         /// <summary>
         /// command object to execute database queries
         /// </summary>
-        protected System.Data.SqlClient.SqlCommand command { get; set; }
+        private System.Data.SqlClient.SqlCommand command { get; set; }
         /// <summary>
         /// data reader to itterate through table data
         /// </summary>
-        protected System.Data.SqlClient.SqlDataReader reader { get; set; }
+        private System.Data.SqlClient.SqlDataReader reader { get; set; }
         /// <summary>
         /// A xml reader for the select commands
         /// </summary>
-        protected System.Xml.XmlReader xmlReader { get; set; }
+        private System.Xml.XmlReader xmlReader { get; set; }
         /// <summary>
         /// return value from NoneExecuteQuery() procedures
         /// </summary>
-        protected System.Data.SqlClient.SqlParameter returnValue { get; set; }
+        private System.Data.SqlClient.SqlParameter returnValue { get; set; }
         /// <summary>
         /// Creates an entity object in the database
         /// </summary>
@@ -140,7 +140,7 @@ namespace DynamicPages.Abstract
         /// <summary>
         /// Builds the SqlConnection. By default this is the "DefaultConnection" string from the Web.Config file
         /// </summary>
-        protected void buildConnection()
+        private void buildConnection()
         {
             if (ConnectionString == null)
             {
@@ -151,19 +151,82 @@ namespace DynamicPages.Abstract
         /// <summary>
         /// Builds the SqlCommand object
         /// </summary>
-        /// <param name="commandString">the command to be executed on the database</param>
+        /// <param name="commandString">Query against the database</param>
         /// <param name="withReturnValue">If the query is not returning and data tables, this should be true</param>
         /// <exception cref="NullReferenceException">thrown when the connection object is not built</exception>"
         protected void buildCommand(string commandString, bool withReturnValue)
         {
-            if (connection == null)
-            {
-                buildConnection();
-            }
+            buildConnection();
             command = connection.CreateCommand();
             command.CommandType = System.Data.CommandType.StoredProcedure;
             command.CommandText = commandString;
             if(withReturnValue)
+            {
+                command.Parameters.Add((returnValue = new System.Data.SqlClient.SqlParameter()
+                {
+                    Direction = System.Data.ParameterDirection.ReturnValue
+                }));
+            }
+        }
+        /// <summary>
+        /// Builds the SqlCommand object
+        /// </summary>
+        /// <param name="commandString">Query against the database</param>
+        /// <param name="withReturnValue">If the query is not returning and data tables, this should be true</param>
+        /// <param name="model">model to add all the parameters, and paramater values</param>
+        /// <exception cref="NullReferenceException">thrown with with the connection object is not built</exception>
+        protected void buildCommand(string commandString, bool withReturnValue, EntityModel model)
+        {
+            buildConnection();
+            command = connection.CreateCommand();
+            command.CommandType = System.Data.CommandType.StoredProcedure;
+            command.CommandText = commandString;
+            addParameters(model);
+            if (withReturnValue)
+            {
+                command.Parameters.Add((returnValue = new System.Data.SqlClient.SqlParameter()
+                {
+                    Direction = System.Data.ParameterDirection.ReturnValue
+                }));
+            }
+        }
+        /// <summary>
+        /// Builds the SqlCommand object
+        /// </summary>
+        /// <param name="commandString">Query against the database</param>
+        /// <param name="withReturnValue">If the query is not returning and data tables, this should be true</param>
+        /// <param name="parameter">parameter to be added to the query</param>
+        /// <param name="parameterValue">value of the paramter to be added</param>
+        protected void buildCommand(string commandString, bool withReturnValue, string parameter, object parameterValue)
+        {
+            buildConnection();
+            command = connection.CreateCommand();
+            command.CommandType = System.Data.CommandType.StoredProcedure;
+            command.CommandText = commandString;
+            addParameters(parameter, parameterValue);
+            if (withReturnValue)
+            {
+                command.Parameters.Add((returnValue = new System.Data.SqlClient.SqlParameter()
+                {
+                    Direction = System.Data.ParameterDirection.ReturnValue
+                }));
+            }
+        }
+        /// <summary>
+        /// Builds the SqlCommand object
+        /// </summary>
+        /// <param name="commandString">Query against the database</param>
+        /// <param name="withReturnValue">If the query is not returning and data tables, this should be true</param>
+        /// <param name="parameters">parameter(s) to be added to the query</param>
+        /// <param name="parameterValues">value(s) of the paramter to be added</param>
+        protected void buildCommand(string commandString, bool withReturnValue, string[] parameters, object[] parameterValues)
+        {
+            buildConnection();
+            command = connection.CreateCommand();
+            command.CommandType = System.Data.CommandType.StoredProcedure;
+            command.CommandText = commandString;
+            addParameters(parameters, parameterValues);
+            if (withReturnValue)
             {
                 command.Parameters.Add((returnValue = new System.Data.SqlClient.SqlParameter()
                 {
@@ -196,6 +259,42 @@ namespace DynamicPages.Abstract
         protected void addParameters(string parameter, object parameterValue)
         {
             command.Parameters.AddWithValue(parameter, parameterValue);
+        }
+        /// <summary>
+        /// Adds parameters to the SqlCommand object
+        /// </summary>
+        /// <param name="paramters"></param>
+        /// <param name="paramterValues"></param>
+        /// <exception cref="NullReferenceException">This is thrown with the connection object is not built, or the command object is not built</exception>
+        /// <exception cref="IndexOutOfRangeException">Exception thrown when the parameterValues are less than the parameters array</exception>
+        private void addParameters(string[] paramters, object[] paramterValues)
+        {
+            for(int i = 0; i < paramters.Length; i++)
+            {
+                command.Parameters.AddWithValue(paramters[i], paramterValues[i]);
+            }
+        }
+        /// <summary>
+        /// Executes a "ExecuteNonQuery()" command against the database
+        /// </summary>
+        /// <returns></returns>
+        public bool execute()
+        {
+            using(connection)
+            {
+                connection.Open();
+                command.ExecuteNonQuery();
+            }
+            command.Dispose();
+            GC.Collect();
+            if ((int)returnValue.Value == 1)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
         }
     }
 }

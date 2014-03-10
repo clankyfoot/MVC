@@ -5,7 +5,7 @@ VisualStudioVersion = 12.0.30110.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MvcWeb", "MvcWeb\MvcWeb.csproj", "{40B2BE56-6826-43EE-8F3E-300876C75867}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UnitTestProject1", "UnitTestProject1\UnitTestProject1.csproj", "{96FE5D63-CE3A-4209-9821-B75F8F160A1D}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebTest", "UnitTestProject1\WebTest.csproj", "{96FE5D63-CE3A-4209-9821-B75F8F160A1D}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DynamicPages", "DynamicPages\DynamicPages.csproj", "{F8A0DC47-C106-47F5-B8C9-B399E419CF4D}"
 EndProject
